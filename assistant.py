@@ -73,7 +73,7 @@ def submit():
         # Clear the input field
         st.session_state.query = ''
 
-st.title("Physics Tutorial Assistant")
+st.title("Physics Topic 20: Nuclear Physics Assistant, because i need to upload more files to be the full Assistant, give your notes to weelookang@gmail.com")
 
 st.header('Conversation', divider='rainbow')
 for role, message in st.session_state.conversation_history:
