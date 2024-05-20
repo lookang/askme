@@ -82,7 +82,7 @@ for role, message in st.session_state.conversation_history:
         message = f"<b style='color: yellow;'>{message}</b>"
         st.markdown(message, unsafe_allow_html=True)
     else:
-        iparts = re.split(r'(\$\$.*?\$\$)', message)  # Split the message into parts, keeping the LaTeX expressions
+        parts = re.split(r'(\$\$.*?\$\$)', message)  # Split the message into parts, keeping the LaTeX expressions
         for part in parts:
             if part.startswith('$$') and part.endswith('$$'):
                 st.latex(part[2:-2])  # Remove the $$ delimiters and render LaTeX
