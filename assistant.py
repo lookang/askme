@@ -25,17 +25,29 @@ def wait_on_run(run, thread):
 
 # Initiate assistant AI response
 def get_assistant_response(user_input=""):
-    message = client.beta.threads.messages.create(thread_id=assistant_thread.id, role="user", content=user_input)
-    run = client.beta.threads.runs.create(thread_id=assistant_thread.id, assistant_id=assistant_id)
-    run = wait_on_run(run, assistant_thread)
+    try:
+        message = client.beta.threads.messages.create(
+            thread_id=assistant_thread.id, 
+            role="user", 
+            content=user_input
+        )
+        run = client.beta.threads.runs.create(
+            thread_id=assistant_thread.id, 
+            assistant_id=my_assistant.id
+        )
+        run = wait_on_run(run, assistant_thread)
 
-    # Retrieve all the messages added after our last user message
-    messages = client.beta.threads.messages.list(thread_id=assistant_thread.id, order="asc", after=message.id)
+        # Retrieve all the messages added after our last user message
+        messages = client.beta.threads.messages.list(
+            thread_id=assistant_thread.id, order="asc", after=message.id
+        )
 
-    # Append the assistant's responses to the session state
-    for msg in messages.data:
-        if msg.role == "assistant":
-            st.session_state.conversation_history.append(("assistant", msg.content[0].text.value))  # Append assistant response
+        # Append the assistant's responses to the session state
+        for msg in messages.data:
+            if msg.role == "assistant":
+                st.session_state.conversation_history.append(("assistant", msg.content[0].text.value))  # Append assistant response
+    except Exception as e:
+        st.error(f"Error in getting assistant response: {e}")
 
 if 'conversation_history' not in st.session_state:
     st.session_state.conversation_history = []
@@ -71,4 +83,3 @@ for role, message in st.session_state.conversation_history:
         render_message(message)
 
 st.text_input("How may I help you?", key='query', on_change=submit)
-
