@@ -81,6 +81,12 @@ for role, message in st.session_state.conversation_history:
         message = f"<b style='color: yellow;'>{message}</b>"
         st.markdown(message, unsafe_allow_html=True)
     else:
+        if "$$" in message:  # Detect if the message contains LaTeX equations
+            latex_expressions = re.findall(r"\$\$(.*?)\$\$", message, re.DOTALL)
+            for expr in latex_expressions:
+                # render LaTeX equations
+                st.latex(expr)
+                message = message.replace(f"$$ {expr} $$", "")  # Remove LaTeX from the message
         st.markdown(message)
 
 st.text_input("How may I help you?", key='query', on_change=submit)
