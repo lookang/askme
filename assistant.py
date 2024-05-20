@@ -27,12 +27,12 @@ def wait_on_run(run, thread):
 def get_assistant_response(user_input=""):
     try:
         message = client.beta.threads.messages.create(
-            thread_id=assistant_thread.id, 
-            role="user", 
+            thread_id=assistant_thread.id,
+            role="user",
             content=user_input
         )
         run = client.beta.threads.runs.create(
-            thread_id=assistant_thread.id, 
+            thread_id=assistant_thread.id,
             assistant_id=my_assistant.id
         )
         run = wait_on_run(run, assistant_thread)
@@ -72,7 +72,10 @@ def render_message(message):
     for part in parts:
         if part.startswith('[') and part.endswith(']'):
             latex_code = part[1:-1].strip()  # Remove the square brackets and strip whitespace
-            st.latex(latex_code)
+            try:
+                st.latex(latex_code)
+            except Exception as e:
+                st.error(f"Error rendering LaTeX: {e}\nLaTeX code: {latex_code}")
         else:
             st.markdown(part)
 
