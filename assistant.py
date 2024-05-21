@@ -71,8 +71,7 @@ def render_message(message):
     # Split the message into parts using a regex to detect LaTeX expressions
     parts = re.split(r'(\$.*?\$)', message)
     for part in parts:
-        # if part.startswith('$') and part.endswith('$'):
-        if part.startswith('[') and part.endswith(']'):
+        if part.startswith('$') and part.endswith('$'):
             latex_code = part[1:-1].strip()  # Remove the dollar signs and strip whitespace
             try:
                 st.latex(latex_code)
