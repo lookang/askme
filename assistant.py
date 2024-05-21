@@ -1,4 +1,5 @@
 # https://assistantphysicslookang.streamlit.app/
+# Import necessary libraries
 import os
 import time
 import streamlit as st
@@ -68,12 +69,16 @@ st.header('Conversation', divider='rainbow')
 # Function to render message parts
 def render_message(message):
     # Split the message into parts using a regex to detect LaTeX expressions
-    parts = re.split(r'(\$.*?\$)', message)
+    parts = re.split(r'(\$\$.*?\$\$|\$.*?\$)', message)
     for part in parts:
-        if part.startswith('$') and part.endswith('$'):
-            latex_code = part[1:-1].strip()  # Remove the dollar signs and strip whitespace
-            latex_code = latex_code.replace("\\ ", " ")  # Remove unnecessary escape characters
-            latex_code = latex_code.replace("\\", "")  # Remove any remaining escape characters
+        if part.startswith('$$') and part.endswith('$$'):
+            latex_code = part[2:-2].strip()  # Remove the double dollar signs and strip whitespace
+            try:
+                st.latex(latex_code)
+            except Exception as e:
+                st.error(f"Error rendering LaTeX: {e}\nLaTeX code: {latex_code}")
+        elif part.startswith('$') and part.endswith('$'):
+            latex_code = part[1:-1].strip()  # Remove the single dollar signs and strip whitespace
             try:
                 st.latex(latex_code)
             except Exception as e:
