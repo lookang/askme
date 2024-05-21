@@ -73,7 +73,6 @@ def render_message(message):
     for part in parts:
         if part.startswith('[') and part.endswith(']'):
             latex_code = part[1:-1].strip()  # Remove the square brackets and strip whitespace
-            latex_code = latex_code.replace("\\", "")  # Remove any remaining escape characters
             try:
                 st.latex(latex_code)
             except Exception as e:
