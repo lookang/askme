@@ -1,4 +1,3 @@
-# https://assistantphysicslookang.streamlit.app/
 # Import necessary libraries
 import os
 import time
