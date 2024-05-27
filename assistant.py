@@ -80,42 +80,42 @@ def render_message(message):
         else:
             st.markdown(part)
 
-# Sample test conversation
-test_conversation = [
-    ("user", "solve another problem: A sample of carbon-14 has a half-life of 5730 years and an initial activity of $2.5 \\times 10^3$ Bq. Calculate the remaining activity after 11460 years."),
-    ("assistant", """To solve this problem, we can use the formula for radioactive decay: $A = A_0 \\cdot e^{-\\lambda t}$ where:
-- (A) is the activity at time (t),
-- ($A_0$) is the initial activity,
-- ($\\lambda$) is the decay constant, and
-- (t) is the time.
+# Comment out the test conversation
+# test_conversation = [
+#     ("user", "solve another problem: A sample of carbon-14 has a half-life of 5730 years and an initial activity of $2.5 \\times 10^3$ Bq. Calculate the remaining activity after 11460 years."),
+#     ("assistant", """To solve this problem, we can use the formula for radioactive decay: $A = A_0 \\cdot e^{-\\lambda t}$ where:
+# - (A) is the activity at time (t),
+# - ($A_0$) is the initial activity,
+# - ($\\lambda$) is the decay constant, and
+# - (t) is the time.
+#
+# The decay constant ($\\lambda$) can be calculated using the half-life formula: $\\lambda = \\frac{\\ln(2)}{T_{1/2}}$ where $T_{1/2}$ is the half-life.
+#
+# Given:
+# $A_0 = 2.5 \\times 10^3$ Bq (initial activity),
+# $T_{1/2} = 5730$ years (half-life), and
+# $t = 11460$ years (time),
+#
+# First, we calculate the decay constant $\\lambda$:
+#
+# $\\lambda = \\frac{\\ln(2)}{5730} \\approx 1.21 \\times 10^{-4}$ years$^{-1}$
+#
+# Next, we calculate the remaining activity after 11460 years:
+#
+# $A = 2.5 \\times 10^3 \\cdot e^{-1.21 \\times 10^{-4} \\times 11460}$
+#
+# $A \\approx 2.5 \\times 10^3 \\cdot e^{-1.38}$
+#
+# $A \\approx 2.5 \\times 10^3 \\cdot 0.25$
+#
+# $A \\approx 625$ Bq
+#
+# So, the remaining activity after 11460 years is approximately 625 Bq.""")
+# ]
 
-The decay constant ($\\lambda$) can be calculated using the half-life formula: $\\lambda = \\frac{\\ln(2)}{T_{1/2}}$ where $T_{1/2}$ is the half-life.
-
-Given:
-$A_0 = 2.5 \\times 10^3$ Bq (initial activity),
-$T_{1/2} = 5730$ years (half-life), and
-$t = 11460$ years (time),
-
-First, we calculate the decay constant $\\lambda$:
-
-$\\lambda = \\frac{\\ln(2)}{5730} \\approx 1.21 \\times 10^{-4}$ years$^{-1}$
-
-Next, we calculate the remaining activity after 11460 years:
-
-$A = 2.5 \\times 10^3 \\cdot e^{-1.21 \\times 10^{-4} \\times 11460}$
-
-$A \\approx 2.5 \\times 10^3 \\cdot e^{-1.38}$
-
-$A \\approx 2.5 \\times 10^3 \\cdot 0.25$
-
-$A \\approx 625$ Bq
-
-So, the remaining activity after 11460 years is approximately 625 Bq.""")
-]
-
-# Add sample conversation to the session state
-for role, message in test_conversation:
-    st.session_state.conversation_history.append((role, message))
+# # Add sample conversation to the session state
+# for role, message in test_conversation:
+#     st.session_state.conversation_history.append((role, message))
 
 # Render the conversation history
 for role, message in st.session_state.conversation_history:
