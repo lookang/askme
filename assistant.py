@@ -142,10 +142,7 @@ for role, message in st.session_state.conversation_history:
     if role == 'user':
         st.markdown(f"<b style='color: yellow;'>{message}</b>", unsafe_allow_html=True)
     else:
-        # Split the message by bullet points
-        bullet_points = re.split(r'(\n- )', message)
-        for point in bullet_points:
-            render_message(point)
+        render_message(message)
 
 st.text_input("How may I help you?", key='query', on_change=submit)
 
