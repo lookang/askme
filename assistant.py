@@ -45,7 +45,7 @@ def get_assistant_response(user_input=""):
         # Append the assistant's responses to the session state
         for msg in messages.data:
             if msg.role == "assistant":
-                st.session_state.conversation_history.append(("assistant", msg.content[0].text.value))  # Append assistant response
+                st.session_state.conversation_history.append(("assistant", msg.content))  # Append assistant response
     except Exception as e:
         st.error(f"Error in getting assistant response: {e}")
 
@@ -68,10 +68,10 @@ st.header('Conversation', divider='rainbow')
 # Function to render message parts
 def render_message(message):
     # Split the message into parts using a regex to detect LaTeX expressions
-    parts = re.split(r'(\[.*?\])', message)
+    parts = re.split(r'(\$.*?\$)', message)
     for part in parts:
-        if part.startswith('[') and part.endswith(']'):
-            latex_code = part[1:-1].strip()  # Remove the square brackets and strip whitespace
+        if part.startswith('$') and part.endswith('$'):
+            latex_code = part[1:-1].strip()  # Remove the dollar signs and strip whitespace
             try:
                 st.latex(latex_code)
             except Exception as e:
