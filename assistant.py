@@ -22,6 +22,12 @@ def wait_on_run(run, thread):
         time.sleep(0.5)
     return run
 
+# Preprocess response to correctly render LaTeX
+def preprocess_response(response):
+    response = response.replace('\\n', '\n')
+    response = response.replace('\\', '\\\\')
+    return response
+
 # Initiate assistant AI response
 def get_assistant_response(user_input=""):
     try:
@@ -44,7 +50,8 @@ def get_assistant_response(user_input=""):
         # Append the assistant's responses to the session state
         for msg in messages.data:
             if msg.role == "assistant":
-                st.session_state.conversation_history.append(("assistant", msg.content))  # Append assistant response
+                preprocessed_content = preprocess_response(msg.content)
+                st.session_state.conversation_history.append(("assistant", preprocessed_content))  # Append assistant response
     except Exception as e:
         st.error(f"Error in getting assistant response: {e}")
 
