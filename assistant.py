@@ -84,10 +84,10 @@ def render_message(message):
     # Ensure the message is a string
     message = str(message)
     # Split the message into parts using a regex to detect LaTeX expressions
-    parts = re.split(r'(\$\$.*?\$\$)', message)
+    parts = re.split(r'(\[.*?\])', message)
     for part in parts:
-        if part.startswith('$$') and part.endswith('$$'):
-            latex_code = part[2:-2].strip()  # Remove the dollar signs and strip whitespace
+        if part.startswith('[') and part.endswith(']'):
+            latex_code = part[1:-1].strip()  # Remove the square brackets and strip whitespace
             try:
                 st.latex(latex_code)
             except Exception as e:
