@@ -9,11 +9,16 @@ import re
 @st.cache_resource
 def load_openai_client_and_assistant():
     client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])
-    my_assistant = client.beta.assistants.retrieve(st.secrets['assistant_id'])
+    assistant_id = 'asst_PiOQMpZUvHq07hqakNFuKEBS'
+    client.set_secret("assistant_id", assistant_id)  # Ensure the assistant ID is set correctly
+    my_assistant = client.beta.assistants.retrieve(assistant_id)
     thread = client.beta.threads.create()
     return client, my_assistant, thread
 
 client, my_assistant, assistant_thread = load_openai_client_and_assistant()
+
+# Display the bot ID being used
+st.write(f"Using Bot ID: {my_assistant.id}")
 
 # Check in loop if assistant AI parses our request
 def wait_on_run(run, thread):
