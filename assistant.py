@@ -83,7 +83,11 @@ def render_message(message):
 # Sample test conversation
 test_conversation = [
     ("user", "solve Example 14 [CIE N2011/41/8b] A pure sample of phosphorus (P-33) which has a decay constant of 3.23 × 10-7 s-1 has an initial activity of 3.7 × 10^6 Bq. Calculate the number of P-33 nuclei remaining in the sample after 30 days."),
-    ("assistant", "To solve this problem, we can use the formula for radioactive decay: $A = A_0 \cdot e^{-\lambda t}$ where: \n\n- (A) is the activity at time (t), \n- ($A_0$) is the initial activity, \n- ($\lambda$) is the decay constant, and \n- (t) is the time."),
+    ("assistant", """To solve this problem, we can use the formula for radioactive decay: $A = A_0 \cdot e^{-\lambda t}$ where:
+- (A) is the activity at time (t),
+- ($A_0$) is the initial activity,
+- ($\lambda$) is the decay constant, and
+- (t) is the time."""),
     ("assistant", "Given: $A_0 = 3.7 \times 10^6 \text{Bq}$ (initial activity), $\lambda = 3.23 \times 10^{-7} \text{s}^{-1}$ (decay constant), and we need to find the activity after 30 days."),
     ("assistant", "First, we need to convert 30 days to seconds: \n\n$30 \text{days} = 30 \times 24 \times 60 \times 60 \ \text{seconds}$"),
     ("assistant", "Then, we can calculate the activity after 30 days using the given data and the formula above. The number of remaining nuclei can also be calculated by dividing the activity by the decay constant (since activity is proportional to the number of nuclei)."),
@@ -99,7 +103,7 @@ for role, message in st.session_state.conversation_history:
     if role == 'user':
         st.markdown(f"<b style='color: yellow;'>{message}</b>", unsafe_allow_html=True)
     else:
-        render_message(message)
+        st.write(message)
 
 st.text_input("How may I help you?", key='query', on_change=submit)
 
