@@ -1,4 +1,3 @@
-# Import necessary libraries
 import os
 import time
 import streamlit as st
@@ -67,10 +66,12 @@ st.header('Conversation', divider='rainbow')
 
 # Function to render message parts
 def render_message(message):
+    # Ensure the message is a string
+    message = str(message)
     # Split the message into parts using a regex to detect LaTeX expressions
     parts = re.split(r'(\$.*?\$)', message)
     for part in parts:
-        if part.startswith('$') and part.endswith('$'):
+        if part.startswith('$') and part.endswith('$')):
             latex_code = part[1:-1].strip()  # Remove the dollar signs and strip whitespace
             try:
                 st.latex(latex_code)
@@ -79,6 +80,21 @@ def render_message(message):
         else:
             st.markdown(part)
 
+# Sample test conversation
+test_conversation = [
+    ("user", "solve Example 14 [CIE N2011/41/8b] A pure sample of phosphorus (P-33) which has a decay constant of 3.23 × 10-7 s-1 has an initial activity of 3.7 × 10^6 Bq. Calculate the number of P-33 nuclei remaining in the sample after 30 days."),
+    ("assistant", "To solve this problem, we can use the formula for radioactive decay: $A = A_0 \cdot e^{-\lambda t}$ where: \n\n- (A) is the activity at time (t), \n- (A_0) is the initial activity, \n- (\lambda) is the decay constant, and \n- (t) is the time."),
+    ("assistant", "Given: $A_0 = 3.7 \times 10^6 \text{Bq}$ (initial activity), $\lambda = 3.23 \times 10^{-7} \text{s}^{-1}$ (decay constant), and we need to find the activity after 30 days."),
+    ("assistant", "First, we need to convert 30 days to seconds: \n\n$30 \text{days} = 30 \times 24 \times 60 \times 60 \ \text{seconds}$"),
+    ("assistant", "Then, we can calculate the activity after 30 days using the given data and the formula above. The number of remaining nuclei can also be calculated by dividing the activity by the decay constant (since activity is proportional to the number of nuclei)."),
+    ("assistant", "Let's perform the calculations: \n\nFirst, we calculate the time in seconds for 30 days: \n\n$30 \text{days} = 30 \times 24 \times 60 \times 60 \ \text{seconds} = 2,592,000 \ \text{seconds}$")
+]
+
+# Add sample conversation to the session state
+for role, message in test_conversation:
+    st.session_state.conversation_history.append((role, message))
+
+# Render the conversation history
 for role, message in st.session_state.conversation_history:
     if role == 'user':
         st.markdown(f"<b style='color: yellow;'>{message}</b>", unsafe_allow_html=True)
@@ -86,3 +102,8 @@ for role, message in st.session_state.conversation_history:
         render_message(message)
 
 st.text_input("How may I help you?", key='query', on_change=submit)
+
+# Add a button to clear the conversation history
+if st.button('Clear Conversation'):
+    st.session_state.conversation_history = []
+    st.experimental_rerun()
