@@ -24,6 +24,8 @@ def wait_on_run(run, thread):
 
 # Preprocess response to correctly render LaTeX
 def preprocess_response(response):
+    if isinstance(response, list):
+        response = response[0]  # Assuming the first element is the text content
     response = response.replace('\\n', '\n')
     response = response.replace('\\', '\\\\')
     return response
@@ -47,9 +49,12 @@ def get_assistant_response(user_input=""):
             thread_id=assistant_thread.id, order="asc", after=message.id
         )
 
-        # Append the assistant's responses to the session state
+        # Debug: print the type and content of the messages
         for msg in messages.data:
             if msg.role == "assistant":
+                st.write(f"Debug: msg.content type: {type(msg.content)}")
+                st.write(f"Debug: msg.content: {msg.content}")
+                
                 preprocessed_content = preprocess_response(msg.content)
                 st.session_state.conversation_history.append(("assistant", preprocessed_content))  # Append assistant response
     except Exception as e:
