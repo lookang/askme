@@ -95,6 +95,11 @@ def render_message(message):
         else:
             st.markdown(part)
 
+# Function to render bullet points with LaTeX
+def render_bullet_points_with_latex(points):
+    for point in points:
+        st.markdown(f"- {point}")
+
 # Comment out the test conversation
 # test_conversation = [
 #     ("user", "solve another problem: A sample of carbon-14 has a half-life of 5730 years and an initial activity of $2.5 \\times 10^3$ Bq. Calculate the remaining activity after 11460 years."),
@@ -137,7 +142,10 @@ for role, message in st.session_state.conversation_history:
     if role == 'user':
         st.markdown(f"<b style='color: yellow;'>{message}</b>", unsafe_allow_html=True)
     else:
-        render_message(message)
+        # Split the message by bullet points
+        bullet_points = re.split(r'(\n- )', message)
+        for point in bullet_points:
+            render_message(point)
 
 st.text_input("How may I help you?", key='query', on_change=submit)
 
