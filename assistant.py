@@ -37,6 +37,10 @@ def preprocess_response(response):
     response = response.replace('\\', '\\\\')
     return response
 
+# Wrap detected LaTeX expressions with double dollar signs
+def wrap_latex_expressions(message):
+    return re.sub(r'\[([^\[]+)\]', r'$$\1$$', message)
+
 # Initiate assistant AI response
 def get_assistant_response(user_input=""):
     try:
@@ -59,7 +63,8 @@ def get_assistant_response(user_input=""):
         for msg in messages.data:
             if msg.role == "assistant":
                 preprocessed_content = preprocess_response(msg.content)
-                st.session_state.conversation_history.append(("assistant", preprocessed_content))  # Append assistant response
+                wrapped_content = wrap_latex_expressions(preprocessed_content)
+                st.session_state.conversation_history.append(("assistant", wrapped_content))  # Append assistant response
     except Exception as e:
         st.error(f"Error in getting assistant response: {e}")
 
