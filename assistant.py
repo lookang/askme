@@ -5,8 +5,8 @@ from openai import OpenAI
 from datetime import datetime
 import re
 
-# Set your OpenAI API key here
-# OPENAI_API_KEY = 
+# Read the OpenAI API key from Streamlit's secrets management
+OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 
 # Set OpenAI client, assistant AI, and assistant AI thread
 @st.cache_resource
