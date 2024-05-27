@@ -37,9 +37,26 @@ def preprocess_response(response):
     response = response.replace('\\', '\\\\')
     return response
 
-# Wrap detected LaTeX expressions with double dollar signs
-def wrap_latex_expressions(message):
-    return re.sub(r'\[([^\[]+)\]', r'$$\1$$', message)
+# Function to render message parts
+def render_message(message):
+    # Ensure the message is a string
+    message = str(message)
+    # Split the message into parts using a regex to detect LaTeX expressions
+    parts = re.split(r'(\[.*?\])', message)
+    for part in parts:
+        if part.startswith('[') and part.endswith(']'):
+            latex_code = part[1:-1].strip()  # Remove the square brackets and strip whitespace
+            try:
+                st.latex(latex_code)
+            except Exception as e:
+                st.error(f"Error rendering LaTeX: {e}\nLaTeX code: {latex_code}")
+        else:
+            st.markdown(part)
+
+# Function to render bullet points with LaTeX
+def render_bullet_points_with_latex(points):
+    for point in points:
+        st.markdown(f"- {point}")
 
 # Initiate assistant AI response
 def get_assistant_response(user_input=""):
@@ -63,8 +80,7 @@ def get_assistant_response(user_input=""):
         for msg in messages.data:
             if msg.role == "assistant":
                 preprocessed_content = preprocess_response(msg.content)
-                wrapped_content = wrap_latex_expressions(preprocessed_content)
-                st.session_state.conversation_history.append(("assistant", wrapped_content))  # Append assistant response
+                st.session_state.conversation_history.append(("assistant", preprocessed_content))  # Append assistant response
     except Exception as e:
         st.error(f"Error in getting assistant response: {e}")
 
@@ -84,27 +100,6 @@ def submit():
 st.title("Physics Topic 20: Nuclear Physics Assistant")
 st.header('Conversation', divider='rainbow')
 
-# Function to render message parts
-def render_message(message):
-    # Ensure the message is a string
-    message = str(message)
-    # Split the message into parts using a regex to detect LaTeX expressions
-    parts = re.split(r'(\$\$.*?\$\$)', message)
-    for part in parts:
-        if part.startswith('$$') and part.endswith('$$'):
-            latex_code = part[2:-2].strip()  # Remove the dollar signs and strip whitespace
-            try:
-                st.latex(latex_code)
-            except Exception as e:
-                st.error(f"Error rendering LaTeX: {e}\nLaTeX code: {latex_code}")
-        else:
-            st.markdown(part)
-
-# Function to render bullet points with LaTeX
-def render_bullet_points_with_latex(points):
-    for point in points:
-        st.markdown(f"- {point}")
-
 # Render the conversation history
 for role, message in st.session_state.conversation_history:
     if role == 'user':
@@ -118,4 +113,3 @@ st.text_input("How may I help you?", key='query', on_change=submit)
 if st.button('Clear Conversation'):
     st.session_state.conversation_history = []
     st.experimental_rerun()
-
