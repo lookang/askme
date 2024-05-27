@@ -78,6 +78,8 @@ def render_message(message):
             except Exception as e:
                 st.error(f"Error rendering LaTeX: {e}\nLaTeX code: {latex_code}")
         else:
+            # Ensure LaTeX backslashes are double-escaped in markdown text
+            part = part.replace('\\', '\\\\')
             st.markdown(part)
 
 # Sample test conversation
