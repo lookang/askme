@@ -22,7 +22,7 @@ def wait_on_run(run, thread):
         time.sleep(0.5)
     return run
 
-# Preprocess response to correctly render LaTeX
+# Preprocess response to correctly render LaTeX and handle text content blocks
 def preprocess_response(response):
     if isinstance(response, list) and len(response) > 0:
         response = response[0].text.value  # Assuming the first element is the TextContentBlock
@@ -49,12 +49,8 @@ def get_assistant_response(user_input=""):
             thread_id=assistant_thread.id, order="asc", after=message.id
         )
 
-        # Debug: print the type and content of the messages
         for msg in messages.data:
             if msg.role == "assistant":
-                st.write(f"Debug: msg.content type: {type(msg.content)}")
-                st.write(f"Debug: msg.content: {msg.content}")
-
                 preprocessed_content = preprocess_response(msg.content)
                 st.session_state.conversation_history.append(("assistant", preprocessed_content))  # Append assistant response
     except Exception as e:
