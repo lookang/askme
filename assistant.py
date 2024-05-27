@@ -5,12 +5,14 @@ from openai import OpenAI
 from datetime import datetime
 import re
 
+# Set your OpenAI API key here
+# OPENAI_API_KEY = 
+
 # Set OpenAI client, assistant AI, and assistant AI thread
 @st.cache_resource
 def load_openai_client_and_assistant():
-    client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])
+    client = OpenAI(api_key=OPENAI_API_KEY)
     assistant_id = 'asst_PiOQMpZUvHq07hqakNFuKEBS'
-    client.set_secret("assistant_id", assistant_id)  # Ensure the assistant ID is set correctly
     my_assistant = client.beta.assistants.retrieve(assistant_id)
     thread = client.beta.threads.create()
     return client, my_assistant, thread
