@@ -31,11 +31,16 @@ def wait_on_run(run, thread):
 
 # Preprocess response to correctly render LaTeX and handle text content blocks
 def preprocess_response(response):
-    if isinstance(response, list) and len(response) > 0:
-        response = response[0].text.value  # Assuming the first element is the TextContentBlock
-    response = response.replace('\\n', '\n')
-    response = response.replace('\\', '\\\\')
-    return response
+    processed_response = ""
+    if isinstance(response, list):
+        for item in response:
+            if isinstance(item, dict) and 'text' in item:
+                processed_response += item['text']['value'].replace('\\n', '\n').replace('\\', '\\\\')
+            elif hasattr(item, 'text') and hasattr(item.text, 'value'):
+                processed_response += item.text.value.replace('\\n', '\n').replace('\\', '\\\\')
+    elif isinstance(response, dict) and 'text' in response:
+        processed_response = response['text']['value'].replace('\\n', '\n').replace('\\', '\\\\')
+    return processed_response
 
 # Function to render message parts
 def render_message(message):
@@ -79,6 +84,7 @@ def get_assistant_response(user_input=""):
 
         for msg in messages.data:
             if msg.role == "assistant":
+                st.write(f"DEBUG: {msg.content}")  # Debugging output to inspect the structure
                 preprocessed_content = preprocess_response(msg.content)
                 st.session_state.conversation_history.append(("assistant", preprocessed_content))  # Append assistant response
     except Exception as e:
