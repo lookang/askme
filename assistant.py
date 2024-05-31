@@ -79,6 +79,7 @@ def get_assistant_response(user_input=""):
 
         for msg in messages.data:
             if msg.role == "assistant":
+                st.write(f"DEBUG: {msg.content}")  # Debugging output to inspect the structure
                 preprocessed_content = preprocess_response(msg.content)
                 st.session_state.conversation_history.append(("assistant", preprocessed_content))  # Append assistant response
     except Exception as e:
@@ -96,6 +97,11 @@ def submit():
         get_assistant_response(user_input)
         # Clear the input field
         st.session_state.query = ''
+
+# Test Case: Define rate of decay
+test_case = "define rate of decay"
+st.session_state.conversation_history.append(("user", test_case))
+get_assistant_response(test_case)
 
 st.title("Physics Topic 20: Nuclear Physics Assistant")
 st.header('Conversation')
